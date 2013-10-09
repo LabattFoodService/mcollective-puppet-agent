@@ -1,0 +1,6 @@
+\.git\
+.md
+.gitignore
+.travis.yml
+Gemfile
+Rakefile
