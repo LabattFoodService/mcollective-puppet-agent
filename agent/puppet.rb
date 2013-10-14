@@ -26,7 +26,7 @@ module MCollective
           begin
             Process.create(:command_line => command, :creation_flags => Process::CREATE_NO_WINDOW)
             0
-          rescue Process::Error => e
+          rescue #Process::Error => e
             1
           end
         else
