@@ -73,8 +73,9 @@ module MCollective
           end
 
           runhost(host)
-
-          sleep 0.5
+          
+          /* wait for kick to start applying */
+          sleep 10
         end
       end
 
