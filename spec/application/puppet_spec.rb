@@ -139,6 +139,20 @@ module MCollective
           @app.expects(:spark).with([2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0]).returns("rspec")
           @app.sparkline_for_field(results, :rspec, 11).should == "rspec  min: 10.0   max: 21.0  "
         end
+
+        it 'should return an empty string with bad data to extract from' do
+          results = []
+          (10...22).each do |c|
+            results << {:statuscode => 1, :data => {:rspec => c}}
+          end
+
+          @app.sparkline_for_field(results, :rspec).should == ''
+        end
+
+        it 'should return an empty string with no data to extract' do
+          results = []
+          @app.sparkline_for_field(results, :rspec).should == ''
+        end
       end
 
       describe "#spark" do
@@ -167,18 +181,11 @@ module MCollective
       end
 
       describe "runall_command" do
-        it "should fail if a compound filter is set" do
-          @app.client.expects(:filter).returns({"compound" => [1]})
-          @app.expects(:raise_message).with(8).raises("rspec")
-          expect { @app.runall_command }.to raise_error("rspec")
-        end
-
         it "should use the Puppetrunner to schedule runs" do
           runner = mock
           runner.expects(:logger)
           runner.expects(:runall)
 
-          @app.client.expects(:filter).returns({"compound" => []})
           @app.runall_command(runner)
         end
       end
